@@ -22,17 +22,29 @@ public class DeleteCourseServlet extends HttpServlet {
 		}
 
 		String idParam = req.getParameter("id");
-		if (idParam == null) {
-			resp.sendRedirect(req.getContextPath() + "/courses");
+		if (idParam == null || idParam.trim().isEmpty()) {
+			req.setAttribute("errorMsg", "No course ID provided.");
+			req.setAttribute("courseList", new CourseDAO().getAllCourses());
+			req.getRequestDispatcher("/WEB-INF/views/course-list.jsp").forward(req, resp);
 			return;
 		}
 
-		int courseId = Integer.parseInt(idParam);
+		int courseId;
+		try {
+			courseId = Integer.parseInt(idParam.trim());
+		} catch (NumberFormatException e) {
+			req.setAttribute("errorMsg", "Invalid course ID.");
+			req.setAttribute("courseList", new CourseDAO().getAllCourses());
+			req.getRequestDispatcher("/WEB-INF/views/course-list.jsp").forward(req, resp);
+			return;
+		}
+
 		CourseDAO dao = new CourseDAO();
 
 		if (dao.hasActiveRegistrations(courseId)) {
 			req.setAttribute("courseList", dao.getAllCourses());
-			req.setAttribute("errorMsg", "Cannot delete. Students are actively registered in this course.");
+			req.setAttribute("errorMsg", "Cannot delete this course. Students are actively registered in it. "
+					+ "Please change their registration status to Completed or Cancelled first.");
 			req.getRequestDispatcher("/WEB-INF/views/course-list.jsp").forward(req, resp);
 			return;
 		}

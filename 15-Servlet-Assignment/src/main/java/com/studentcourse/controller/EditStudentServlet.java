@@ -23,14 +23,29 @@ public class EditStudentServlet extends HttpServlet {
 		}
 
 		String idParam = req.getParameter("id");
-		if (idParam == null) {
-			resp.sendRedirect(req.getContextPath() + "/students");
+		if (idParam == null || idParam.trim().isEmpty()) {
+			req.setAttribute("errorMsg", "No student ID provided.");
+			req.setAttribute("studentList", new StudentDAO().getAllStudents());
+			req.getRequestDispatcher("/WEB-INF/views/student-list.jsp").forward(req, resp);
 			return;
 		}
 
-		Student student = new StudentDAO().getStudentById(Integer.parseInt(idParam));
+		int studentId;
+		try {
+			studentId = Integer.parseInt(idParam.trim());
+		} catch (NumberFormatException e) {
+			req.setAttribute("errorMsg", "Invalid student ID.");
+			req.setAttribute("studentList", new StudentDAO().getAllStudents());
+			req.getRequestDispatcher("/WEB-INF/views/student-list.jsp").forward(req, resp);
+			return;
+		}
+
+		StudentDAO dao = new StudentDAO();
+		Student student = dao.getStudentById(studentId);
 		if (student == null) {
-			resp.sendRedirect(req.getContextPath() + "/students");
+			req.setAttribute("errorMsg", "Student with ID " + studentId + " not found.");
+			req.setAttribute("studentList", dao.getAllStudents());
+			req.getRequestDispatcher("/WEB-INF/views/student-list.jsp").forward(req, resp);
 			return;
 		}
 

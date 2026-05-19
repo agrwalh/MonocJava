@@ -1,9 +1,14 @@
 package com.studentcourse.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.studentcourse.model.Registration;
 import com.studentcourse.util.DBConnection;
-import java.sql.*;
-import java.util.*;
 
 public class RegistrationDAO {
 
@@ -25,7 +30,7 @@ public class RegistrationDAO {
 		List<Registration> list = new ArrayList<>();
 		String sql = "SELECT r.registration_id, r.student_id, r.course_id, "
 				+ "r.registration_date, r.status, s.student_name, c.course_name " + "FROM registrations r "
-				+ "JOIN students s ON r.student_id = s.student_id " + "JOIN courses c ON r.course_id = c.course_id "
+				+ "JOIN students s ON r.student_id = s.student_id " + "JOIN courses  c ON r.course_id  = c.course_id "
 				+ "ORDER BY r.registration_id DESC";
 		try (Connection con = DBConnection.getConnection();
 				PreparedStatement ps = con.prepareStatement(sql);

@@ -18,8 +18,8 @@ public class LogoutServlet extends HttpServlet {
 		HttpSession session = req.getSession(false);
 		if (session != null) {
 			session.invalidate();
+			System.out.println("[LogoutServlet] Session invalidated.");
 		}
-		System.out.println("Admin logged out. Session destroyed.");
 		resp.sendRedirect(req.getContextPath() + "/login");
 	}
 }

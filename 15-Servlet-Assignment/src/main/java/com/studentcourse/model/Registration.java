@@ -1,7 +1,6 @@
 package com.studentcourse.model;
 
 public class Registration {
-
 	private int registrationId;
 	private int studentId;
 	private int courseId;

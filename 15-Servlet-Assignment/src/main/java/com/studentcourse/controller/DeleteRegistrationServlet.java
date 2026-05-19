@@ -22,10 +22,24 @@ public class DeleteRegistrationServlet extends HttpServlet {
 		}
 
 		String idParam = req.getParameter("id");
-		if (idParam != null) {
-			new RegistrationDAO().deleteRegistration(Integer.parseInt(idParam));
+		if (idParam == null || idParam.trim().isEmpty()) {
+			req.setAttribute("registrationList", new RegistrationDAO().getAllRegistrations());
+			req.setAttribute("errorMsg", "No registration ID provided.");
+			req.getRequestDispatcher("/WEB-INF/views/registration-list.jsp").forward(req, resp);
+			return;
 		}
 
+		int registrationId;
+		try {
+			registrationId = Integer.parseInt(idParam.trim());
+		} catch (NumberFormatException e) {
+			req.setAttribute("registrationList", new RegistrationDAO().getAllRegistrations());
+			req.setAttribute("errorMsg", "Invalid registration ID.");
+			req.getRequestDispatcher("/WEB-INF/views/registration-list.jsp").forward(req, resp);
+			return;
+		}
+
+		new RegistrationDAO().deleteRegistration(registrationId);
 		resp.sendRedirect(req.getContextPath() + "/registrations");
 	}
 

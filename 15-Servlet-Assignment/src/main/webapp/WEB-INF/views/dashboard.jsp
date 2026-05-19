@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Dashboard</title>
@@ -16,10 +16,11 @@
 				Welcome,
 				<%=session.getAttribute("loggedInUser")%>!
 			</h3>
-			<p>Here is a quick summary of the system.</p>
+			<p>
+				Logged in as Administrator &nbsp;|&nbsp; Login Time:
+				<%=session.getAttribute("loginTime")%></p>
 		</div>
-
-		<h2>Dashboard</h2>
+		<h2>Dashboard Overview</h2>
 		<div class="card-row">
 			<div class="card">
 				<div class="card-number">${totalStudents}</div>
@@ -34,17 +35,18 @@
 				<div class="card-label">Total Registrations</div>
 			</div>
 		</div>
-
-		<h2>Quick Navigation</h2>
+		<h2>Quick Actions</h2>
 		<div class="quick-links">
-			<a href="${pageContext.request.contextPath}/students">View
-				Students</a> <a href="${pageContext.request.contextPath}/student/add">Add
-				Student</a> <a href="${pageContext.request.contextPath}/courses">View
-				Courses</a> <a href="${pageContext.request.contextPath}/course/add">Add
-				Course</a> <a href="${pageContext.request.contextPath}/registrations">View
-				Registrations</a> <a
-				href="${pageContext.request.contextPath}/registration/add">Register
-				Student</a>
+			<a href="${pageContext.request.contextPath}/students">&#128100;
+				View Students</a> <a
+				href="${pageContext.request.contextPath}/student/add">&#10133;
+				Add Student</a> <a href="${pageContext.request.contextPath}/courses">&#128218;
+				View Courses</a> <a href="${pageContext.request.contextPath}/course/add">&#10133;
+				Add Course</a> <a
+				href="${pageContext.request.contextPath}/registrations">&#128196;
+				View Registrations</a> <a
+				href="${pageContext.request.contextPath}/registration/add">&#10133;
+				Register Student</a>
 		</div>
 	</div>
 </body>

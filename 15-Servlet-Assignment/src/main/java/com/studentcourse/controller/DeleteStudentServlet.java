@@ -22,18 +22,29 @@ public class DeleteStudentServlet extends HttpServlet {
 		}
 
 		String idParam = req.getParameter("id");
-		if (idParam == null) {
-			resp.sendRedirect(req.getContextPath() + "/students");
+		if (idParam == null || idParam.trim().isEmpty()) {
+			req.setAttribute("errorMsg", "No student ID provided.");
+			req.setAttribute("studentList", new StudentDAO().getAllStudents());
+			req.getRequestDispatcher("/WEB-INF/views/student-list.jsp").forward(req, resp);
 			return;
 		}
 
-		int studentId = Integer.parseInt(idParam);
+		int studentId;
+		try {
+			studentId = Integer.parseInt(idParam.trim());
+		} catch (NumberFormatException e) {
+			req.setAttribute("errorMsg", "Invalid student ID.");
+			req.setAttribute("studentList", new StudentDAO().getAllStudents());
+			req.getRequestDispatcher("/WEB-INF/views/student-list.jsp").forward(req, resp);
+			return;
+		}
+
 		StudentDAO dao = new StudentDAO();
 
 		if (dao.hasRegistrations(studentId)) {
 			req.setAttribute("studentList", dao.getAllStudents());
-			req.setAttribute("errorMsg",
-					"Cannot delete. This student is registered in a course. Remove the registration first.");
+			req.setAttribute("errorMsg", "Cannot delete this student. They are enrolled in a course. "
+					+ "Please remove their course registration first.");
 			req.getRequestDispatcher("/WEB-INF/views/student-list.jsp").forward(req, resp);
 			return;
 		}

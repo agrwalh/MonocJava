@@ -23,14 +23,29 @@ public class EditCourseServlet extends HttpServlet {
 		}
 
 		String idParam = req.getParameter("id");
-		if (idParam == null) {
-			resp.sendRedirect(req.getContextPath() + "/courses");
+		if (idParam == null || idParam.trim().isEmpty()) {
+			req.setAttribute("errorMsg", "No course ID provided.");
+			req.setAttribute("courseList", new CourseDAO().getAllCourses());
+			req.getRequestDispatcher("/WEB-INF/views/course-list.jsp").forward(req, resp);
 			return;
 		}
 
-		Course course = new CourseDAO().getCourseById(Integer.parseInt(idParam));
+		int courseId;
+		try {
+			courseId = Integer.parseInt(idParam.trim());
+		} catch (NumberFormatException e) {
+			req.setAttribute("errorMsg", "Invalid course ID.");
+			req.setAttribute("courseList", new CourseDAO().getAllCourses());
+			req.getRequestDispatcher("/WEB-INF/views/course-list.jsp").forward(req, resp);
+			return;
+		}
+
+		CourseDAO dao = new CourseDAO();
+		Course course = dao.getCourseById(courseId);
 		if (course == null) {
-			resp.sendRedirect(req.getContextPath() + "/courses");
+			req.setAttribute("errorMsg", "Course with ID " + courseId + " not found.");
+			req.setAttribute("courseList", dao.getAllCourses());
+			req.getRequestDispatcher("/WEB-INF/views/course-list.jsp").forward(req, resp);
 			return;
 		}
 

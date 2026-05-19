@@ -6,7 +6,6 @@ import com.studentcourse.dao.CourseDAO;
 import com.studentcourse.dao.RegistrationDAO;
 import com.studentcourse.dao.StudentDAO;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,11 +18,13 @@ public class DashboardServlet extends HttpServlet {
 
 	@Override
 	public void init() {
-		System.out.println("DashboardServlet initialized");
+		System.out.println("[DashboardServlet] init() called");
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		System.out.println("[DashboardServlet] doGet() called");
 
 		HttpSession session = req.getSession(false);
 		if (session == null || session.getAttribute("loggedInUser") == null) {
@@ -35,12 +36,11 @@ public class DashboardServlet extends HttpServlet {
 		req.setAttribute("totalCourses", new CourseDAO().getTotalCourses());
 		req.setAttribute("totalRegistrations", new RegistrationDAO().getTotalRegistrations());
 
-		RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/views/dashboard.jsp");
-		rd.forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
 	}
 
 	@Override
 	public void destroy() {
-		System.out.println("DashboardServlet destroyed");
+		System.out.println("[DashboardServlet] destroy() called");
 	}
 }

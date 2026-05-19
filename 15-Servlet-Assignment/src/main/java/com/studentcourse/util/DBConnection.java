@@ -2,32 +2,20 @@ package com.studentcourse.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConnection {
 
 	private static final String URL = "jdbc:mysql://localhost:3306/student_course_db";
-
 	private static final String USERNAME = "root";
-
 	private static final String PASSWORD = "Laa017@@";
 
-	public static Connection getConnection() {
-
-		Connection con = null;
-
+	public static Connection getConnection() throws SQLException {
 		try {
-
 			Class.forName("com.mysql.cj.jdbc.Driver");
-
-			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-
-			System.out.println("Database Connected Successfully");
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			throw new SQLException("MySQL JDBC Driver not found.", e);
 		}
-
-		return con;
+		return DriverManager.getConnection(URL, USERNAME, PASSWORD);
 	}
 }
