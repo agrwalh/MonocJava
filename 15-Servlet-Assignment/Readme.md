@@ -332,8 +332,4 @@ Log in with `admin` / `admin123`.
 
 ---
 
-## Author
 
-**Harsh Agarwal**  
-Mini Project — Java Servlet Web Application  
-Apache Tomcat 10.x · MySQL 8.x · Java 21 · Eclipse Enterprise Edition
